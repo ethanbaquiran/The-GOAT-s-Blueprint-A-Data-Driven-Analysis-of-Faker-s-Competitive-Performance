@@ -10,13 +10,25 @@ layout: home
 
 ## Introduction
 
-Faker (Lee Sang-hyeok) is widely regarded as the greatest League of Legends 
-player of all time. This project uses Oracle's Elixir match data from his 
-2015 and 2025 competitive seasons to answer:
+This project analyzes **Faker** (Lee Sang-hyeok), widely regarded as the greatest 
+League of Legends player of all time, using Oracle's Elixir match data from his 
+**2015 and 2025 competitive seasons**.
 
-> **Is Faker's most impactful gameplay statistic in his strongest year (2015) 
-still statistically significant in predicting match outcomes in 2025?**
+**Research Question:** Is Faker's most impactful gameplay statistic in his strongest 
+year (2015) still statistically significant in predicting match outcomes in 2025?
 
----
+The dataset contains 81 rows for 2015 and 187 rows for 2025, each representing one 
+of Faker's individual game performances. Relevant columns:
 
-## More coming soon...
+| Column | Description |
+|--------|-------------|
+| `result` | Win (1) or loss (0) |
+| `kills` | Kills |
+| `deaths` | Deaths |
+| `assists` | Assists |
+| `kda` | (kills + assists) / deaths |
+| `golddiffat15` | Gold difference at 15 minutes |
+| `xpdiffat15` | XP difference at 15 minutes |
+| `csdiffat15` | CS difference at 15 minutes |
+| `damageshare` | % of team damage dealt |
+| `visionscore` | Vision control score |
