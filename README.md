@@ -1,4 +1,4 @@
-# Faker: The Timeless Legend — Can 2015's Best Stat Still Predict Wins in 2025?
+# Faker: The Timeless Legend Can 2015's Best Stat Still Predict Wins in 2025?
 
 **Name:** Ethan Baquiran
 
@@ -6,13 +6,13 @@
 
 ## Introduction
 
-League of Legends (LoL) is a globally dominant multiplayer online battle arena (MOBA) developed by Riot Games. It has one of the most storied professional esports histories in the world, with international tournaments drawing tens of millions of viewers. The dataset used in this project comes from [Oracle's Elixir](https://oracleselixir.com/), a comprehensive repository of professional LoL esports match data — specifically covering games from the **2015** and **2025** seasons.
+League of Legends (LoL) is a globally dominant multiplayer online battle arena (MOBA) developed by Riot Games. It has one of the most storied professional esports histories in the world, with international tournaments drawing tens of millions of viewers. The dataset used in this project comes from [Oracle's Elixir](https://oracleselixir.com/), a comprehensive repository of professional LoL esports match data, specifically covering games from the **2015** and **2025** seasons.
 
-In the decade between these two years, one player has remained synonymous with greatness: **Faker** (Lee Sang-hyeok), the mid laner for T1 (formerly SKT T1), widely regarded as the greatest LoL player of all time. Faker won Worlds in 2013, 2015, 2016, 2023, and 2024. He was dominant in 2015 — and he was *still* competing at the highest level in 2025 at age 29.
+In the decade between these two years, one player has remained synonymous with greatness: **Faker** (Lee Sang-hyeok), the mid laner for T1 (formerly SKT T1), widely regarded as the greatest LoL player of all time. Faker won Worlds in 2013, 2015, 2016, 2023, and 2024. He was dominant in 2015, and he was *still* competing at the highest level in 2025 at age 29.
 
 **The central question driving this analysis:**
 
-> **Was KDA — Faker's most impactful performance stat in 2015 — still a statistically significant predictor of his match outcomes a decade later in 2025?**
+> **Was KDA, Faker's most impactful performance stat in 2015, still a statistically significant predictor of his match outcomes a decade later in 2025?**
 
 This question matters because the game has changed dramatically over 10 years: faster pacing, new objectives (void grubs, Rift Herald), major meta shifts, and an entirely different professional landscape. If the stat most predictive of Faker's wins in 2015 still holds up in 2025, it reveals something profound about both the consistency of elite play and the enduring structure of League of Legends itself.
 
@@ -25,7 +25,7 @@ The dataset contains one row per player per game. For Faker's individual rows, t
 | `kills` | Number of kills in the game |
 | `deaths` | Number of deaths in the game |
 | `assists` | Number of assists in the game |
-| `kda` | (kills + assists) / max(deaths, 1) — our primary feature |
+| `kda` | (kills + assists) / max(deaths, 1), our primary feature |
 | `golddiffat15` | Gold difference vs. opponent at 15 minutes |
 | `xpdiffat15` | XP difference vs. opponent at 15 minutes |
 | `csdiffat15` | CS difference vs. opponent at 15 minutes |
@@ -59,7 +59,7 @@ The resulting dataset has **187 games from 2015** and a comparable sample from 2
 
 ### Univariate Analysis
 
-The histogram below shows the distribution of Faker's KDA across his 2015 games. The distribution is heavily right-skewed — most games cluster between 2–6, but there is a long tail of dominant performances where his KDA exceeded 15 or even 20. This asymmetry is characteristic of elite carry players: the floor is mediocre, but the ceiling is extraordinary.
+The histogram below shows the distribution of Faker's KDA across his 2015 games. The distribution is heavily right-skewed, most games cluster between 2–6, but there is a long tail of dominant performances where his KDA exceeded 15 or even 20. This asymmetry is characteristic of elite carry players: the floor is mediocre, but the ceiling is extraordinary.
 
 <iframe
   src="assets/kda_dist.html"
@@ -68,7 +68,7 @@ The histogram below shows the distribution of Faker's KDA across his 2015 games.
   frameborder="0"
 ></iframe>
 
-The histogram below shows Faker's gold difference at 15 minutes in 2015. Unlike KDA, this is more symmetrically distributed and centered near 0 — even Faker loses laning phase sometimes, and gold leads are constrained by professional-level play on both sides.
+The histogram below shows Faker's gold difference at 15 minutes in 2015. Unlike KDA, this is more symmetrically distributed and centered near 0, even Faker loses laning phase sometimes, and gold leads are constrained by professional-level play on both sides.
 
 <iframe
   src="assets/golddiff_dist.html"
@@ -79,7 +79,7 @@ The histogram below shows Faker's gold difference at 15 minutes in 2015. Unlike 
 
 ### Bivariate Analysis
 
-The box plot below splits Faker's KDA by match result in 2015. The separation is striking: in losses, the median KDA hovers around 1.5–2, while in wins it climbs to 6–10+. This single visualization foreshadows the hypothesis test — KDA is not random noise but a deeply outcome-linked variable.
+The box plot below splits Faker's KDA by match result in 2015. The separation is striking: in losses, the median KDA hovers around 1.5–2, while in wins it climbs to 6–10+. This single visualization foreshadows the hypothesis test, KDA is not random noise but a deeply outcome-linked variable.
 
 <iframe
   src="assets/kda_box.html"
@@ -105,7 +105,7 @@ The table below shows Faker's average stats grouped by year and result. Two thin
 
 ### NMAR Analysis
 
-Columns like `dragons`, `towers`, and `void_grubs` are missing for **all of Faker's rows**. We believe this is **NMAR (Not Missing At Random)**. In the Oracle's Elixir dataset, these columns are only recorded in *team summary rows*, not individual player rows — so the missingness depends on the *type* of row (player vs. team), which is not captured by any other column in the data. No additional variable we could observe would make this missingness explainable; it is structural to how the data was collected.
+Columns like `dragons`, `towers`, and `void_grubs` are missing for **all of Faker's rows**. We believe this is **NMAR (Not Missing At Random)**. In the Oracle's Elixir dataset, these columns are only recorded in *team summary rows*, not individual player rows, so the missingness depends on the *type* of row (player vs. team), which is not captured by any other column in the data. No additional variable we could observe would make this missingness explainable; it is structural to how the data was collected.
 
 If we could obtain a column indicating `row_type` (player vs. team summary), the missingness would become MAR, since team-level stats would then always be present for team rows and always absent for player rows.
 
@@ -118,13 +118,13 @@ We tested whether the missingness of `golddiffat25` in the 2025 dataset depends 
 **Test Statistic:** Difference in win rate between missing and non-missing groups.
 **Significance Level:** 0.05
 
-The observed difference in win rates was **−0.0319**, and after 1,000 permutations, the p-value was **1.0000**. We **fail to reject** the null hypothesis. Games missing `golddiffat25` are simply games that ended before 25 minutes — and those short games happen regardless of whether Faker wins or loses. This is **MCAR (Missing Completely at Random)**. We drop these rows when using 25-minute features.
+The observed difference in win rates was **−0.0319**, and after 1,000 permutations, the p-value was **1.0000**. We **fail to reject** the null hypothesis. Games missing `golddiffat25` are simply games that ended before 25 minutes, and those short games happen regardless of whether Faker wins or loses. This is **MCAR (Missing Completely at Random)**. We drop these rows when using 25-minute features.
 
 ---
 
 ## Hypothesis Testing
 
-**Research Question:** Is KDA — the stat most strongly correlated with Faker's wins in 2015 — still a statistically significant predictor of match outcomes in 2025?
+**Research Question:** Is KDA, the stat most strongly correlated with Faker's wins in 2015, still a statistically significant predictor of match outcomes in 2025?
 
 From EDA, KDA showed the largest win/loss gap of any feature in 2015 (1.73 in losses vs. 9.32 in wins). We now formally test whether this relationship persists a decade later.
 
@@ -149,7 +149,7 @@ From EDA, KDA showed the largest win/loss gap of any feature in 2015 (1.73 in lo
   frameborder="0"
 ></iframe>
 
-The permutation distribution above shows the null distribution across 10,000 shuffled label assignments. The red vertical line marks the observed difference of 7.605 — not a single permutation came close to matching it.
+The permutation distribution above shows the null distribution across 10,000 shuffled label assignments. The red vertical line marks the observed difference of 7.605, not a single permutation came close to matching it.
 
 **Conclusion:** We **reject the null hypothesis**. Faker's KDA is a statistically significant predictor of match outcomes in 2025. A permutation test was the right choice here: it makes no distributional assumptions about KDA, and directly tests whether the observed gap could arise by random chance under the null. The result is unambiguous: the most impactful stat from Faker's 2015 season remains his most powerful performance signal a decade later.
 
@@ -159,7 +159,7 @@ The permutation distribution above shows the null distribution across 10,000 shu
 
 **Prediction Problem:** Predict whether Faker **wins** (`result = 1`) a game based on his in-game performance statistics.
 
-This is a **binary classification** problem. The response variable is `result` (win = 1, loss = 0). We use features available at game-end: `kda`, `golddiffat15`, `xpdiffat15`, `csdiffat15`, `killsat15`, `deathsat15`, `damageshare`, `visionscore`, `cspm`, and `dpm`. All are statistics recorded *during* the game — there is no data leakage, as these would all be known by the time we make a prediction.
+This is a **binary classification** problem. The response variable is `result` (win = 1, loss = 0). We use features available at game-end: `kda`, `golddiffat15`, `xpdiffat15`, `csdiffat15`, `killsat15`, `deathsat15`, `damageshare`, `visionscore`, `cspm`, and `dpm`. All are statistics recorded *during* the game, there is no data leakage, as these would all be known by the time we make a prediction.
 
 We evaluate using **accuracy** as our primary metric. Since Faker's win rate is approximately 50%, the dataset is balanced and accuracy is an appropriate metric (a "predict always win" classifier would only achieve ~50%).
 
@@ -169,8 +169,8 @@ We evaluate using **accuracy** as our primary metric. Since Faker's win rate is 
 
 The baseline model uses a **Decision Tree Classifier** trained on just two features:
 
-- `kda` (quantitative) — motivated by our hypothesis test showing it's the strongest win predictor
-- `golddiffat15` (quantitative) — the most common proxy for mid-lane laning advantage
+- `kda` (quantitative), motivated by our hypothesis test showing it's the strongest win predictor
+- `golddiffat15` (quantitative), the most common proxy for mid-lane laning advantage
 
 Both features are quantitative with no encoding required.
 
@@ -186,11 +186,11 @@ This baseline confirms that KDA and gold difference carry useful signal. However
 
 **New Features Added:**
 
-- `damageshare` — fraction of team damage Faker dealt; measures how much he carried
-- `visionscore` — tactical map control and information advantage
-- `cspm` — farming efficiency across the full game (not just at 15 min)
-- `dpm` — sustained damage output throughout the game
-- `xpdiffat15`, `csdiffat15`, `killsat15`, `deathsat15` — early-game snapshot features
+- `damageshare`, fraction of team damage Faker dealt; measures how much he carried
+- `visionscore`, tactical map control and information advantage
+- `cspm`, farming efficiency across the full game (not just at 15 min)
+- `dpm`, sustained damage output throughout the game
+- `xpdiffat15`, `csdiffat15`, `killsat15`, `deathsat15`, early-game snapshot features
 
 Each feature captures a different dimension of mid-lane performance. KDA reflects peak moments; DPM reflects consistency; vision score reflects awareness; CS/XP differences reflect laning mastery. Together they give the model a much richer picture than the baseline's two features.
 
@@ -257,7 +257,7 @@ Since our research question specifically compares Faker across eras, fairness ac
   frameborder="0"
 ></iframe>
 
-The 4.4% gap falls within our 5% fairness threshold. We **fail to reject** the null hypothesis. The model generalizes comparably across both eras, supporting the validity of our cross-era analysis. The slightly higher 2025 accuracy likely reflects that the modern meta produces sharper, more extreme performance signals — not that the model is biased toward one era.
+The 4.4% gap falls within our 5% fairness threshold. We **fail to reject** the null hypothesis. The model generalizes comparably across both eras, supporting the validity of our cross-era analysis. The slightly higher 2025 accuracy likely reflects that the modern meta produces sharper, more extreme performance signals, not that the model is biased toward one era.
 
 **Conclusion:** Our model is fair across years. The stat-to-outcome relationships Faker established in 2015 are structurally consistent enough with 2025 that a single model predicts both eras with similar accuracy, reinforcing our central finding: KDA has been, and remains, the defining metric of Faker's legendary performance.
 
