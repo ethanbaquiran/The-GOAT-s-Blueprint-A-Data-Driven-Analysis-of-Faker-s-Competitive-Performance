@@ -1,4 +1,4 @@
-# Faker: The Timeless Legend Can 2015's Best Stat Still Predict Wins in 2025?
+# Faker: The Timeless Legend | Can 2015's Best Stat Still Predict Wins in 2025?
 
 **Name:** Ethan Baquiran
 
