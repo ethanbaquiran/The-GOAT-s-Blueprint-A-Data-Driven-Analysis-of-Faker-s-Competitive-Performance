@@ -1,0 +1,6 @@
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+  - jekyll-remote-theme
+
+title: "Faker: The Timeless Legend"
+description: "A DSC 80 Final Project analyzing Faker's performance across 2015 and 2025 — Ethan Baquiran"
