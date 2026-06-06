@@ -33,7 +33,7 @@ The dataset contains one row per player per game. **It contains 81 Faker games f
 | `xpdiffat15`   | XP difference vs. opponent at 15 minutes                 |
 | `csdiffat15`   | CS difference vs. opponent at 15 minutes                 |
 | `damageshare`  | Fraction of team's total damage Faker dealt              |
-| `visionscore`  | Vision control and map information contribution          |
+| `visionscore`  | Vision control contribution (only tracked from 2017+)    |
 | `dpm`          | Damage per minute (sustained output over the game)       |
 | `cspm`         | CS per minute (farming efficiency)                       |
 
@@ -48,7 +48,7 @@ The raw data was filtered to Faker's individual player rows from the 2015 and 20
 - **KDA computed** as `(kills + assists) / max(deaths, 1)` to avoid division-by-zero in deathless games.
 - **Boolean columns** (`result`, `firstblood`, `firstdragon`, etc.) were cast to their correct types.
 - **Year column** added to enable cross-era comparison.
-- **Rows with missing `golddiffat15`** dropped when using 15-minute features (these are games that ended before 15 minutes).
+- **Rows with missing `golddiffat25`** dropped when using 25-minute features (5 games that ended before 25 minutes).
 
 The resulting dataset has **81 games from 2015** and **187 from 2025**. Below is the head of the cleaned DataFrame:
 
@@ -95,31 +95,31 @@ The table below shows Faker's average stats grouped by year and result. Two thin
 
 ### NMAR Analysis
 
-Columns like `dragons`, `towers`, and `void_grubs` are missing for **all of Faker's rows**. We believe this is **NMAR (Not Missing At Random)**. In the Oracle's Elixir dataset, these columns are only recorded in *team summary rows*, not individual player rows — so the missingness depends on the *type* of row (player vs. team), which is not captured by any other column in the data. No additional variable we could observe would make this missingness explainable; it is structural to how the data was collected.
+Columns like `dragons`, `towers`, and `void_grubs` are missing for **all of Faker's rows**. We believe this is **NMAR (Not Missing At Random)**. In the Oracle's Elixir dataset, these columns are only recorded in *team summary rows*, not individual player rows — so the missingness depends on the *type* of row (player vs. team), which is not captured by any other column in the data. No additional variable we could observe would fully explain this missingness; it is structural to how the data was collected.
 
 If we could obtain a column indicating `row_type` (player vs. team summary), the missingness would become MAR, since team-level stats would always be present for team rows and always absent for player rows.
 
-### Missingness Dependency Test 1: `golddiffat15` missingness vs. `result` — MCAR
+### Missingness Dependency Test 1: `golddiffat25` missingness vs. `result` — MCAR
 
-We tested whether the missingness of `golddiffat15` in 2025 depends on `result` (win/loss).
+We tested whether the missingness of `golddiffat25` in 2025 depends on match outcome (`result`). Games missing `golddiffat25` are games that ended before 25 minutes.
 
-- **Null Hypothesis:** Missingness of `golddiffat15` is independent of match outcome.
-- **Alternative Hypothesis:** Missingness of `golddiffat15` depends on match outcome.
+- **Null Hypothesis:** Missingness of `golddiffat25` is independent of match outcome.
+- **Alternative Hypothesis:** Missingness of `golddiffat25` depends on match outcome.
 - **Test Statistic:** Difference in win rates between missing and non-missing groups.
 - **Significance Level:** 0.05
 
-After 1,000 permutations, the p-value was **> 0.05**. We **fail to reject** the null hypothesis. Games missing `golddiffat15` are simply games that ended before 15 minutes — and those short games happen regardless of whether Faker wins or loses. This is **MCAR (Missing Completely at Random)**.
+The observed difference in win rates was **−0.0319**, and after 1,000 permutations, the p-value was **> 0.05**. We **fail to reject** the null hypothesis. Games ending before 25 minutes happen regardless of whether Faker wins or loses — the missingness has nothing to do with match outcome. This is **MCAR (Missing Completely at Random)**.
 
-### Missingness Dependency Test 2: `golddiffat15` missingness vs. `damageshare` — MAR
+### Missingness Dependency Test 2: `visionscore` missingness vs. `year` — MAR
 
-We then tested whether the missingness of `golddiffat15` depends on `damageshare`, a continuous feature. Games ending before 15 minutes tend to be early stomps, which may produce different damage share patterns.
+We tested whether the missingness of `visionscore` depends on `year`. Oracle's Elixir did not track vision score in 2015, so it is entirely absent for all 2015 rows but fully populated in 2025.
 
-- **Null Hypothesis:** Missingness of `golddiffat15` is independent of `damageshare`.
-- **Alternative Hypothesis:** Missingness of `golddiffat15` depends on `damageshare`.
-- **Test Statistic:** Absolute difference in mean `damageshare` between missing and non-missing groups.
+- **Null Hypothesis:** Missingness of `visionscore` is independent of year.
+- **Alternative Hypothesis:** Missingness of `visionscore` depends on year.
+- **Test Statistic:** Difference in proportion missing between 2015 and 2025 games.
 - **Significance Level:** 0.05
 
-After 1,000 permutations, the p-value was **< 0.05**. We **reject** the null hypothesis. `golddiffat15` is **MAR (Missing At Random)** on `damageshare` — games that end before 15 minutes tend to have different damage share distributions than full-length games.
+The observed difference was **1.0000** (100% missing in 2015, 0% missing in 2025), and the p-value was **0.0000** across 1,000 permutations. We **reject** the null hypothesis. `visionscore` is **MAR (Missing At Random)** on `year` — its missingness is entirely explained by which season the game was played in, not by the values of `visionscore` itself.
 
 ---
 
@@ -141,7 +141,7 @@ From EDA, KDA showed the largest win/loss gap of any feature in 2015 (1.73 in lo
 - Observed difference: **7.605**
 - P-value (10,000 permutations): **< 0.0001**
 
-[Permutation Test: KDA Difference](assets/permutation.html)
+[Permutation Test: KDA Difference (Wins vs Losses)](assets/permutation.html)
 
 The permutation distribution above shows the null distribution across 10,000 shuffled label assignments. The red vertical line marks the observed difference of 7.605 — not a single permutation came close to matching it.
 
@@ -176,7 +176,7 @@ All 6 features are quantitative with no ordinal or nominal encoding required.
 - Training Accuracy: **100%**
 - Test Accuracy: **~95%**
 
-The 100% training accuracy signals overfitting — the model has memorized the training set. Feature importance confirms **KDA dominates**, accounting for more predictive weight than all other features combined. These weaknesses motivate the final model: we need hyperparameter tuning, cross-validation, and a richer feature set to get a more generalizable model.
+The 100% training accuracy signals overfitting — the model has memorized the training set. Feature importance confirms **KDA dominates**, accounting for more predictive weight than all other features combined. These weaknesses motivate the final model: hyperparameter tuning, cross-validation, and a richer feature set are needed to produce a more generalizable model.
 
 ---
 
