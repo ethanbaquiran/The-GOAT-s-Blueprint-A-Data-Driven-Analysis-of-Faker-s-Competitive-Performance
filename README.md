@@ -66,17 +66,32 @@ Note: `visionscore` is 0 for all 2015 rows, this metric was not tracked by Oracl
 
 The histogram below shows the distribution of Faker's KDA across his 2015 games. The distribution is heavily right-skewed, most games cluster between 2–6, but there is a long tail of dominant performances where his KDA exceeded 15 or even 20. This asymmetry is characteristic of elite carry players: the floor is mediocre, but the ceiling is extraordinary.
 
-[KDA Distribution (2015)](assets/kda_dist.html)
+<iframe
+    src="assets/kda_dist.html"
+    width="100%"
+    height="600"
+    frameborder="0">
+</iframe>
 
 The histogram below shows Faker's gold difference at 15 minutes in 2015. Unlike KDA, this is more symmetrically distributed and centered near 0, even Faker loses laning phase sometimes, and gold leads are constrained by professional-level play on both sides.
 
-[Gold Difference at 15 Distribution (2015)](assets/golddiff_dist.html)
+<iframe
+    src="assets/golddiff_dist.html"
+    width="100%"
+    height="600"
+    frameborder="0">
+</iframe>
 
 ### Bivariate Analysis
 
 The box plot below splits Faker's KDA by match result in 2015. The separation is striking: in losses, the median KDA hovers around 1.5–2, while in wins it climbs to 6–10+. This single visualization foreshadows the hypothesis test, KDA is not random noise but a deeply outcome-linked variable.
 
-[KDA by Game Result (2015)](assets/kda_box.html)
+<iframe
+    src="assets/kda_box.html"
+    width="100%"
+    height="600"
+    frameborder="0">
+</iframe>
 
 ### Interesting Aggregates
 
@@ -141,7 +156,12 @@ From EDA, KDA showed the largest win/loss gap of any feature in 2015 (1.73 in lo
 - Observed difference: **7.605**
 - P-value (10,000 permutations): **< 0.0001**
 
-[Permutation Test: KDA Difference (Wins vs Losses)](assets/permutation.html)
+<iframe
+    src="assets/permutation.html"
+    width="100%"
+    height="600"
+    frameborder="0">
+</iframe>
 
 The permutation distribution above shows the null distribution across 10,000 shuffled label assignments. The red vertical line marks the observed difference of 7.605, not a single permutation came close to matching it.
 
@@ -208,11 +228,20 @@ param_grid = {
 
 The feature importance plot below shows that **KDA dominates at ~0.49 importance**, directly confirming our research question. DPM emerged as the second most important feature (~0.11), a new signal specific to the 2025 meta where overall damage output is higher.
 
-[Feature Importance, Final Model](assets/feature_importance.html)
-
+<iframe
+    src="assets/feature_importance.html"
+    width="100%"
+    height="650"
+    frameborder="0">
+</iframe>
 The confusion matrix below summarizes predictions on the held-out test set:
 
-[Confusion Matrix, Final Model](assets/confusion_matrix.html)
+<iframe
+    src="assets/confusion_matrix.html"
+    width="100%"
+    height="650"
+    frameborder="0">
+</iframe>
 
 The final model improved on the baseline by: (1) adding DPM, damage share, and vision score as features; (2) using GridSearchCV with cross-validation to select hyperparameters and reduce overfitting; and (3) evaluating with 5-fold CV rather than a single train/test split for more reliable accuracy estimates.
 
@@ -242,7 +271,12 @@ We use a **permutation test**: shuffle the year labels 1,000 times and recompute
 - Observed Difference: **−4.4%**
 - P-value (permutation test, n=1,000): **≥ 0.05 → Fail to reject null**
 
-[Fairness Analysis: Accuracy by Year + Permutation Test](assets/fairness.html)
+<iframe
+    src="assets/fairness.html"
+    width="100%"
+    height="650"
+    frameborder="0">
+</iframe>
 
 **Conclusion:** We **fail to reject the null hypothesis**. The 4.4% gap is consistent with random variation under the null. Our model is **fair across years**, it generalizes comparably to both eras rather than being biased toward one. The slightly higher 2025 accuracy likely reflects that the modern meta produces sharper, more extreme performance signals, not model bias. This supports the validity of our central finding: KDA has been, and remains, the defining metric of Faker's legendary performance.
 
